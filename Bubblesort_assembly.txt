@@ -1,0 +1,42 @@
+addi sp, sp, -8   
+sd x10, 4(sp)        
+sd x11, 0(sp)     
+addi x10, x0 ,0x100 #base address of array     
+addi x11,x0, 6 #length of array/list
+addi x7, x0, 5
+sd x7, 0(x10)
+addi x7,x0, 9
+sd x7, 4(x10)
+addi x7, x0, 1
+sd x7, 8(x10)
+addi x5, x0, -1 #initialize i
+addi x6, x0, 0 #initialize j
+bubble:
+beq x11, x0, return
+jal x1, for1
+for1:
+bge x5, x11, return
+addi x5, x5, 1
+jal x1, for2
+for2:
+bge x6, x11, for1
+slli x7, x5, 2
+add x7, x10, x7 #calculating a[i]
+lw x28, 0(x7)
+slli x30, x6, 2
+add x30, x10, x30 #address of a[j]
+lw x29, 0(x30)
+blt x28, x29, SWAP
+addi x6, x6, 1
+beq x0, x0, for2
+SWAP:
+addi x31, x28, 0 #temp = a[i]
+addi x28, x29, 0 #a[i] = a[j]
+addi x29, x31, 0 #a[j] = temp
+sd x28, 0(x7)
+sd x29, 0(x30)
+jalr x0, x1, 0
+return:
+ld x11, 0(sp)
+ld x10, 4(sp)
+addi sp, sp, 8
